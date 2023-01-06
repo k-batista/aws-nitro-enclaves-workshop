@@ -16,5 +16,4 @@ socat vsock-listen:9091,reuseaddr,fork tcp-connect:127.0.0.1:9090 &
 socat tcp4-listen:80,reuseaddr,fork vsock-connect:3:8001 &
 
 # Run http server
-python3 /app/traffic_forwarder.py 127.0.0.1 80 3 8001 &
 python3 /app/server.py 0.0.0.0 9090
