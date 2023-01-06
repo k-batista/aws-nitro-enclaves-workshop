@@ -20,13 +20,30 @@ cd socat-1.7.4.4
 ./configure
 make 
 sudo make install
+cd ..
 ```
+
+### Config Nitro Enclave Allocator:  CPU and Memory 
+
+It is necessary to increase the memory of the allocator
+
+```
+sudo vi /etc/nitro_enclaves/allocator.yaml
+```
+
+/etc/nitro_enclaves/allocator.yaml
+``` 
+memory_mib: 4096
+cpu_count: 2
+```
+
 
 ### Enable nitro enclave and docker
 ```
 sudo systemctl start nitro-enclaves-allocator.service && sudo systemctl enable nitro-enclaves-allocator.service
 sudo systemctl start docker && sudo systemctl enable docker
 ```
+
 
 ---
 ## Example: Http Channel
@@ -52,10 +69,18 @@ sudo nitro-cli build-enclave --docker-uri http-example:latest --output-file http
 
 ### 3. Running the enclave - server
 ```
-sudo nitro-cli run-enclave --cpu-count 2 --memory 2048 --enclave-cid 17 --eif-path http-example.eif --debug-mode
+sudo nitro-cli run-enclave --cpu-count 2 --memory 4096 --enclave-cid 17 --eif-path http-example.eif --debug-mode
 ```
 
-### 4. Running the client
+### 4. Enable de Vsock proxy
+
+```
+echo "allowlist:" >> vsock-proxy.yaml
+echo "- {address: polygon.shekel.com, port: 80}" >> vsock-proxy.yaml
+vsock-proxy 8001 dummy.restapiexample.com 80 --config vsock-proxy.yaml &
+```
+
+### 5. Running the client
 
 Enable the communication via vsock
 ```

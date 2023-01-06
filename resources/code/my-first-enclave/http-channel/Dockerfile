@@ -26,7 +26,8 @@ COPY --from=socat-image /usr/local/bin/ /usr/local/bin/
 
 WORKDIR /app
 
-COPY http.py ./
+COPY server.py ./
+COPY traffic_forwarder.py ./
 COPY run.sh ./
 
 RUN chmod +x /app/run.sh

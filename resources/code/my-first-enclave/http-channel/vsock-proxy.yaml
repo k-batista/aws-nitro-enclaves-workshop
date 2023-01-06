@@ -1,0 +1,2 @@
+allowlist:
+- {address: dummy.restapiexample.com, port: 80}

@@ -1,6 +1,16 @@
 import sys
+import json
 from socket import *
+import urllib.request
 
+
+def api():
+    data = urllib.request.urlopen("http://dummy.restapiexample.com/api/v1/employees")
+
+    print("Handle Response")
+
+    response = json.loads(data.read())
+    return response["status"]
 
 def server(local_ip, local_port):
     serversocket = socket(AF_INET, SOCK_STREAM)
@@ -17,10 +27,12 @@ def server(local_ip, local_port):
             pieces = rd.split("\n")
             if ( len(pieces) > 0 ) : print(pieces[0])
 
+            response = api()
             data = "HTTP/1.1 200 OK\r\n"
             data += "Content-Type: text/html; charset=utf-8\r\n"
             data += "\r\n"
-            data += "<html><body>Hello World</body></html>\r\n\r\n"
+            data += f"<html><body>Hello World: {response}</body></html>\r\n\r\n"
+
             clientsocket.sendall(data.encode())
             clientsocket.shutdown(SHUT_WR)
 
