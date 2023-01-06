@@ -26,7 +26,7 @@ COPY --from=socat-image /usr/local/bin/ /usr/local/bin/
 
 WORKDIR /app
 
-COPY mock.py ./
+COPY http.py ./
 COPY run.sh ./
 
 RUN chmod +x /app/run.sh

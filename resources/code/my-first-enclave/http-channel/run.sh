@@ -3,6 +3,11 @@
 
 #!/bin/sh
 
+# Assign an IP address to local loopback 
+ip addr add 127.0.0.1/32 dev lo
+
+ip link set dev lo up
+
 # Enabling redirect through vsock
 socat vsock-listen:9091,reuseaddr,fork tcp-connect:127.0.0.1:9090 &
 
