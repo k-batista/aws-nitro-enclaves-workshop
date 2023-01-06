@@ -16,5 +16,3 @@ touch /app/libnsm.so
 # Run traffic forwarder in background and start the server
 python3 /app/traffic_forwarder.py 127.0.0.1 443 3 8001 &
 python3 /app/server.py server 5005
-
-python3 /app/traffic_forwarder.py 127.0.0.1 80 3 8001 &
