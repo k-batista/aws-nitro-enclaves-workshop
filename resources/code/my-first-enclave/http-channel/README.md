@@ -61,14 +61,11 @@ cd example/aws-nitro-enclaves-workshop-http/resources/code/my-first-enclave/http
 > On the server, the communication via vsock will be activated
 > 
 > `socat vsock-listen:9091,reuseaddr,fork tcp-connect:127.0.0.1:9090 &`
+> `socat tcp4-listen:80,reuseaddr,fork vsock-connect:3:8001 &`
 
 ```
 sudo docker build ./ -t http-example
 sudo nitro-cli build-enclave --docker-uri http-example:latest --output-file http-example.eif
-```
-
-### 3. Running the enclave - server
-```
 sudo nitro-cli run-enclave --cpu-count 2 --memory 4096 --enclave-cid 17 --eif-path http-example.eif --debug-mode
 ```
 
@@ -76,7 +73,7 @@ sudo nitro-cli run-enclave --cpu-count 2 --memory 4096 --enclave-cid 17 --eif-pa
 
 ```
 echo "allowlist:" >> vsock-proxy.yaml
-echo "- {address: polygon.shekel.com, port: 80}" >> vsock-proxy.yaml
+echo "- {address: dummy.restapiexample.com, port: 80}" >> vsock-proxy.yaml
 vsock-proxy 8001 dummy.restapiexample.com 80 --config vsock-proxy.yaml &
 ```
 
@@ -91,6 +88,9 @@ Testing using curl
 ```
 curl http://localhost:9090
 ```
+
+socat tcp4-listen:80,reuseaddr,fork vsock-connect:3:8081 &
+
 
 ### See the logs
 ```

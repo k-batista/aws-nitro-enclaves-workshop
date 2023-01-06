@@ -8,11 +8,12 @@ ip addr add 127.0.0.1/32 dev lo
 
 ip link set dev lo up
 
-# Enabling redirect through vsock
-socat vsock-listen:9091,reuseaddr,fork tcp-connect:127.0.0.1:9090 &
-
+# Add a hosts record, pointing target site calls to local loopback
 echo "127.0.0.1   dummy.restapiexample.com" >> /etc/hosts
 
+# Enabling redirect through vsock
+socat vsock-listen:9091,reuseaddr,fork tcp-connect:127.0.0.1:9090 &
+socat tcp4-listen:80,reuseaddr,fork vsock-connect:3:8001 &
 
 # Run http server
 python3 /app/traffic_forwarder.py 127.0.0.1 80 3 8001 &
